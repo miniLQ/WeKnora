@@ -465,7 +465,7 @@ func TestConnectorListResources(t *testing.T) {
 	}
 }
 
-func TestConnectorListResources_IncludesWikiNodeTree(t *testing.T) {
+func TestConnectorListResources_ReturnsSpacesOnly(t *testing.T) {
 	topNodes := []wikiNode{
 		{NodeToken: "nt-root", ObjToken: "obj-root", ObjType: "docx", Title: "Root", HasChild: true, ObjEditTime: "100"},
 		{NodeToken: "nt-peer", ObjToken: "obj-peer", ObjType: "docx", Title: "Peer", ObjEditTime: "200"},
@@ -482,24 +482,19 @@ func TestConnectorListResources_IncludesWikiNodeTree(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListResources() error: %v", err)
 	}
-	if len(resources) != 4 {
-		t.Fatalf("want 4 resources (space + 3 nodes), got %d: %+v", len(resources), resources)
+	// ListResources now returns only spaces (lazy load), not the full node tree.
+	// Node traversal happens in FetchAll/FetchIncremental when user selects a space.
+	if len(resources) != 1 {
+		t.Fatalf("want 1 resource (space only), got %d: %+v", len(resources), resources)
 	}
-
-	byID := make(map[string]types.Resource)
-	for _, resource := range resources {
-		byID[resource.ExternalID] = resource
+	if resources[0].ExternalID != "space1" {
+		t.Errorf("ExternalID = %q, want %q", resources[0].ExternalID, "space1")
 	}
-	root := byID["space1:nt-root"]
-	if root.ParentID != "space1" || !root.HasChildren {
-		t.Fatalf("root resource wrong: %+v", root)
+	if !resources[0].HasChildren {
+		t.Error("space should have HasChildren=true so the frontend knows it can be selected")
 	}
-	child := byID["space1:nt-child"]
-	if child.ParentID != "space1:nt-root" || child.Name != "Child" {
-		t.Fatalf("child resource wrong: %+v", child)
-	}
-	if child.Metadata["space_id"] != "space1" || child.Metadata["node_token"] != "nt-child" {
-		t.Fatalf("child metadata wrong: %+v", child.Metadata)
+	if resources[0].Type != "wiki_space" {
+		t.Errorf("Type = %q, want %q", resources[0].Type, "wiki_space")
 	}
 }
 

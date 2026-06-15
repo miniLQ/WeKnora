@@ -43,7 +43,8 @@ func (c *Connector) Validate(ctx context.Context, config *types.DataSourceConfig
 	return nil
 }
 
-// ListResources lists all accessible Feishu Wiki spaces and nodes as selectable resources.
+// ListResources lists all accessible Feishu Wiki spaces as selectable resources.
+// Node traversal is deferred to FetchAll/FetchIncremental when the user selects a specific space.
 func (c *Connector) ListResources(ctx context.Context, config *types.DataSourceConfig) ([]types.Resource, error) {
 	feishuConfig, err := parseFeishuConfig(config)
 	if err != nil {
@@ -70,17 +71,6 @@ func (c *Connector) ListResources(ctx context.Context, config *types.DataSourceC
 				"space_id":   space.SpaceID,
 			},
 		})
-
-		nodes, err := client.ListAllWikiNodesRecursive(ctx, space.SpaceID)
-		if err != nil {
-			var partialErr *partialWikiNodeListError
-			if !errors.As(err, &partialErr) {
-				return nil, fmt.Errorf("list feishu wiki nodes in space %s: %w", space.SpaceID, err)
-			}
-		}
-		for _, node := range nodes {
-			resources = append(resources, wikiNodeToResource(space.SpaceID, node))
-		}
 	}
 
 	return resources, nil
