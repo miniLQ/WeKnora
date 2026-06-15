@@ -543,7 +543,6 @@ services:
     command: ["dex", "serve", "/etc/dex/config.yaml"]
     profiles:
       - dex
-      - full
 
   # ---------------------------------------------------------------------------
   # Langfuse 自建可观测栈 (opt-in via `--profile langfuse`)

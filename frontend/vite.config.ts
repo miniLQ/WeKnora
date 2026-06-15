@@ -115,14 +115,8 @@ export default defineConfig({
           if (id.includes('tdesign-vue-next')) {
             return 'vendor-tdesign'
           }
-          if (
-            id.includes('/vue/') ||
-            id.includes('/vue-router/') ||
-            id.includes('/pinia/') ||
-            id.includes('/vue-i18n/')
-          ) {
-            return 'vendor-vue'
-          }
+          // 不拆分 Vue 为独立 chunk，避免与 TDesign 加载顺序冲突导致
+          // "Cannot access 'X_' before initialization" 运行时错误
         },
       },
     },
