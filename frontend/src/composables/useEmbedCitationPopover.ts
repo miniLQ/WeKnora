@@ -1,5 +1,9 @@
 import { onBeforeUnmount, ref, unref, watch, type MaybeRef, type Ref } from 'vue'
 import { getEmbedChunkById } from '@/api/embed'
+import {
+  getCitationChunkCache,
+  setCitationChunkCache,
+} from '@/utils/citationChunkCache'
 
 type FloatState = {
   visible: boolean
@@ -12,8 +16,6 @@ type FloatState = {
   loading: boolean
   error: string
 }
-
-const chunkCache = new Map<string, { content: string; error?: string }>()
 
 export function useEmbedCitationPopover(
   rootRef: Ref<HTMLElement | null>,
@@ -34,6 +36,8 @@ export function useEmbedCitationPopover(
 
   let hoverTimer: number | null = null
   let closeTimer: number | null = null
+
+  const getCacheScope = () => `embed:${unref(channelId)}:${unref(token)}`
 
   const positionFor = (el: HTMLElement, offsetY = 0) => {
     const rect = el.getBoundingClientRect()
@@ -63,7 +67,8 @@ export function useEmbedCitationPopover(
     float.value.visible = true
     positionFor(el, 4)
 
-    const cached = chunkCache.get(chunkId)
+    const scope = getCacheScope()
+    const cached = getCitationChunkCache(scope, chunkId)
     if (cached) {
       float.value.content = cached.content
       float.value.error = cached.error || ''
@@ -77,11 +82,11 @@ export function useEmbedCitationPopover(
     try {
       const res = await getEmbedChunkById(unref(channelId), unref(token), chunkId)
       const content = String(res?.data?.content || '').trim()
-      chunkCache.set(chunkId, { content })
+      setCitationChunkCache(scope, chunkId, { content })
       float.value.content = content
     } catch {
       const msg = 'Failed to load'
-      chunkCache.set(chunkId, { content: '', error: msg })
+      setCitationChunkCache(scope, chunkId, { content: '', error: msg })
       float.value.error = msg
     } finally {
       float.value.loading = false
