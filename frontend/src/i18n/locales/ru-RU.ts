@@ -609,6 +609,7 @@ export default {
     updatedAt: 'Обновлено',
     clickToViewFull: 'Нажмите для полного просмотра',
     rebuildDocument: 'Пересобрать документ',
+    batchReparseSuccess: 'Отправлено {count} задач на пересборку',
     rebuildConfirm: 'Подтвердить пересборку документа "{fileName}"? Существующие фрагменты будут удалены и документ будет повторно проанализирован.',
     rebuildSubmitted: 'Задача пересборки отправлена',
     rebuildFailed: 'Ошибка пересборки, попробуйте позже',

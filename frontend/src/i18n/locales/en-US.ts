@@ -519,6 +519,7 @@ export default {
     newSession: 'New Chat',
     editDocument: 'Edit Document',
     rebuildDocument: 'Rebuild Document',
+    batchReparseSuccess: 'Submitted {count} rebuild tasks',
     rebuildConfirm: 'Rebuild document "{fileName}"? This will clear existing chunks and parse it again.',
     rebuildSubmitted: 'Rebuild task submitted',
     rebuildFailed: 'Rebuild failed. Please try again later',

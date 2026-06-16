@@ -459,6 +459,7 @@ export default {
     updatedAt: "수정일시",
     clickToViewFull: "전체 텍스트와 세그먼트를 보려면 카드를 클릭하세요.",
     rebuildDocument: "지식 재구축",
+    batchReparseSuccess: "{count}개 재구축 작업 제출",
     rebuildConfirm: '문서 "{fileName}"을(를) 재구축하시겠습니까? 기존 청크가 삭제되고 다시 파싱됩니다.',
     rebuildSubmitted: "재구축 작업이 제출되었습니다",
     rebuildFailed: "재구축 실패, 나중에 다시 시도해주세요",

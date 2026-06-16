@@ -323,6 +323,7 @@ func RegisterKnowledgeRoutes(r *gin.RouterGroup, handler *handler.KnowledgeHandl
 		// surfaces.
 		k.PUT("/tags", g.Contributor(), handler.UpdateKnowledgeTagBatch)
 		k.GET("/search", g.Viewer(), handler.SearchKnowledge)
+		k.POST("/batch-reparse", g.Contributor(), handler.BatchReparseKnowledge)
 		k.POST("/batch-delete", g.Contributor(), handler.BatchDeleteKnowledge)
 		k.POST("/move", g.Contributor(), handler.MoveKnowledge)
 		k.GET("/move/progress/:task_id", g.Viewer(), handler.GetKnowledgeMoveProgress)

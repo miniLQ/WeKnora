@@ -520,6 +520,7 @@ export default {
     newSession: "新会话",
     editDocument: "编辑文档",
     rebuildDocument: "重建知识",
+    batchReparseSuccess: "已提交 {count} 个重建任务",
     rebuildConfirm: '确认重建文档"{fileName}"？该操作会清理现有分块并重新解析。',
     rebuildSubmitted: "重建任务已提交",
     rebuildFailed: "重建失败，请稍后再试",
